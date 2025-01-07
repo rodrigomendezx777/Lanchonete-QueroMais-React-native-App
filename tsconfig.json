@@ -4,7 +4,7 @@
     "strict": true,
     "paths": {
       "@/*": [
-        "./*"
+        "./src/*"
       ]
     }
   },
@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "src/app/(auth)/cadLoja.tsx", "src/app/(auth)/cadMotorista.tsx", "src/components/SignupForm.tsx"  ]
 }
