@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet, KeyboardAvoidingView, ScrollView} from "react-native"
 import { theme } from "@/theme"
-import { useRouter } from 'expo-router';
+import { useRouter,  } from 'expo-router';
+
 
 export default function Home() {
 

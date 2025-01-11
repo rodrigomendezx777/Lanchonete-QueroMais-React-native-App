@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import ConfirmationModal from '../../components/ConfirmationModal'; // Importe o componente
+import { theme } from '@/theme';
 
 export default function ForgotPasswordScreen() {
 
@@ -66,11 +67,11 @@ const styles = StyleSheet.create({
 
   logoContainer: {
     alignItems: 'center',
-    backgroundColor: '#0F0147',
+    backgroundColor: theme.colors.vermelhoclaro,
     padding: 20,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
-    width: '100%',
+    
     marginBottom: 50,
     justifyContent: 'center',
   },
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     color: 'black'
   },
   submitButton: {
-    backgroundColor: '#0F0147',
+    backgroundColor: theme.colors.vermelhoclaro,
     width: '100%',
     height: 50,
     borderRadius: 20,

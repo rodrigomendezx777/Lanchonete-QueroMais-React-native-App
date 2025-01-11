@@ -1,27 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvoidingView, ScrollView} from 'react-native';
+import React from 'react';
+import { View, Image, StyleSheet, KeyboardAvoidingView, ScrollView } from 'react-native';
 import LoginForm from '../../components/SignupForm';
-import { theme } from "@/theme"
-import { useRouter } from 'expo-router';
+import { theme } from "@/theme";
 
-
-
-
- 
-
-export default function cadMotorista() {
-
- const router = useRouter();
-
-
-  // Defina a função handleLogin que será passada para o LoginForm
-  const handleLogin = (email: string, password: string) => {
-    router.push('/dashMotorista')
-    // Aqui você pode implementar a lógica para login, como validação ou API.
-    console.log('Email:', email);
-    console.log('Password:', password);
-  };
-
+export default function CadMotorista() {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <ScrollView>
@@ -29,9 +11,7 @@ export default function cadMotorista() {
           <Image source={require('../../../assets/images/LogoQueroMais.png')} style={styles.logo} />
         </View>
 
-        {/* Passando handleLogin como onLogin */}
-        <LoginForm onLogin={handleLogin} destination="dashMotorista" />
-
+        <LoginForm tipo="motorista" />
       </ScrollView>
     </KeyboardAvoidingView>
   );

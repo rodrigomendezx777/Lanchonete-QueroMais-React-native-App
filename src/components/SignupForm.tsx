@@ -1,75 +1,61 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { theme } from '@/theme';
 import { useRouter } from 'expo-router';
-
+import { useAuth } from '@/contexts/AuthContext';
 
 type LoginFormProps = {
-  onLogin: (email: string, password: string) => void;
-  destination: 'dashLoja' | 'dashMotorista'; // Nova prop para indicar o destino
+  tipo: 'loja' | 'motorista';
 };
 
-
-
-export default function LoginForm({ onLogin }: LoginFormProps) {
-
-  const router = useRouter()
-
-
+export default function LoginForm({ tipo }: LoginFormProps) {
+  const router = useRouter();
+  const { signIn, signUp } = useAuth();
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const validateForm = () => {
-
-
-
     if (!email || !password) {
       setErrorMessage('Por favor, preencha todos os campos.');
       return false;
     }
 
-
-
     if (!/\S+@\S+\.\S+/.test(email)) {
       setErrorMessage('Por favor, insira um email válido.');
       return false;
     }
-        // Validação de comprimento mínimo da senha
+
     if (password.length < 8) {
-        setErrorMessage('A senha deve ter pelo menos 8 caracteres.');
-        return false;
+      setErrorMessage('A senha deve ter pelo menos 8 caracteres.');
+      return false;
     }
 
-    // // Validação de força da senha
-    // const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    // if (!strongPasswordRegex.test(password)) {
-    //     setErrorMessage('A senha deve conter uma letra maiúscula, um número e um caractere especial.');
-    //     return false;
-    // }
-
-
-
-// Se todas as validações passarem
-    setErrorMessage(''); // Limpa a mensagem de erro
+    setErrorMessage('');
     return true;
   };
 
-  const handleLogin = () => {
+  const handleSubmit = async () => {
     if (validateForm()) {
-      onLogin(email, password);
-
+      try {
+        if (isLogin) {
+          await signIn(email, password);
+        } else {
+          await signUp(email, password, tipo);
+        }
+        
+        // Redirecionar baseado no tipo de usuário
+        router.push(tipo === 'loja' ? '/dashLoja' : '/dashMotorista');
+      } catch (error: any) {
+        Alert.alert('Erro', error.message);
+      }
     }
-
-
   };
-
-
-
 
   return (
     <View style={styles.formContainer}>
-      <Text style={styles.title}>Faça Login</Text>
+      <Text style={styles.title}>{isLogin ? 'Faça Login' : 'Cadastre-se'}</Text>
 
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
@@ -91,12 +77,18 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
         onChangeText={setPassword}
       />
 
-    <TouchableOpacity onPress={() => router.push("/ForgotPasswordScreen")}>
+      <TouchableOpacity onPress={() => router.push("/ForgotPasswordScreen")}>
         <Text style={styles.forgotPasswordText}>Recuperar Senha</Text>
-        </TouchableOpacity>
+      </TouchableOpacity>
 
-      <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
-        <Text style={styles.loginButtonText}>Entrar</Text>
+      <TouchableOpacity onPress={handleSubmit} style={styles.loginButton}>
+        <Text style={styles.loginButtonText}>{isLogin ? 'Entrar' : 'Cadastrar'}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => setIsLogin(!isLogin)} style={styles.toggleButton}>
+        <Text style={styles.toggleButtonText}>
+          {isLogin ? 'Não tem uma conta? Cadastre-se' : 'Já tem uma conta? Faça login'}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -159,5 +151,13 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     marginBottom: 10,
+  },
+  toggleButton: {
+    marginTop: 20,
+  },
+  toggleButtonText: {
+    color: theme.colors.vermelhoclaro,
+    fontSize: 16,
+    textDecorationLine: 'underline',
   },
 });

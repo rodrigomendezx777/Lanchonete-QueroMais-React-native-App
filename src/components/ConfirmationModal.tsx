@@ -1,4 +1,5 @@
 // components/ConfirmationModal.tsx
+import { theme } from '@/theme';
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, Image, ImageSourcePropType } from 'react-native';
 
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   okButton: {
-    backgroundColor: '#0F0147',
+    backgroundColor: theme.colors.vermelhoclaro,
     padding: 10,
     borderRadius: 5,
     width: '100%',

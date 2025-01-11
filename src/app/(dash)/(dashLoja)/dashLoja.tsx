@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity,ImageBackgr
 import { theme } from "@/theme";
 import { useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';  // Importando os ícones
+import { useCart } from '@/contexts/CartContext';
 
 // Defina o tipo para os produtos
 interface Product {
@@ -15,21 +16,21 @@ interface Product {
 const Dashloja = () => {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
-  const [cart, setCart] = useState<Product[]>([]);
+  const { cart, addToCart } = useCart();
 
   useEffect(() => {
     const fetchProducts = async () => {
       const fetchedProducts: Product[] = [
-        { id: '1', name: 'Produto 1', price: 100, image: require('../../../assets/images/icon.png') },
-        { id: '2', name: 'Produto 2', price: 150, image: require('../../../assets/images/icon.png') },
-        { id: '3', name: 'Produto 3', price: 200, image: require('../../../assets/images/icon.png') },
-        { id: '4', name: 'Produto 4', price: 250, image: require('../../../assets/images/icon.png') },
-        { id: '5', name: 'Produto 5', price: 300, image: require('../../../assets/images/icon.png') },
-        { id: '6', name: 'Produto 6', price: 350, image: require('../../../assets/images/icon.png') },
-        { id: '7', name: 'Produto 7', price: 350, image: require('../../../assets/images/icon.png') },
-        { id: '8', name: 'Produto 8', price: 350, image: require('../../../assets/images/icon.png') },
-        { id: '9', name: 'Produto 9', price: 350, image: require('../../../assets/images/icon.png') },
-        { id: '10', name: 'Produto 10', price: 350, image: require('../../../assets/images/icon.png') },
+        { id: '1', name: 'Produto 1', price: 100, image: require('../../../../assets/images/icon.png') },
+        { id: '2', name: 'Produto 2', price: 150, image: require('../../../../assets/images/icon.png') },
+        { id: '3', name: 'Produto 3', price: 200, image: require('../../../../assets/images/icon.png') },
+        { id: '4', name: 'Produto 4', price: 250, image: require('../../../../assets/images/icon.png') },
+        { id: '5', name: 'Produto 5', price: 300, image: require('../../../../assets/images/icon.png') },
+        { id: '6', name: 'Produto 6', price: 350, image: require('../../../../assets/images/icon.png') },
+        { id: '7', name: 'Produto 7', price: 350, image: require('../../../../assets/images/icon.png') },
+        { id: '8', name: 'Produto 8', price: 350, image: require('../../../../assets/images/icon.png') },
+        { id: '9', name: 'Produto 9', price: 350, image: require('../../../../assets/images/icon.png') },
+        { id: '10', name: 'Produto 10', price: 350, image: require('../../../../assets/images/icon.png') },
       ];
       setProducts(fetchedProducts);
     };
@@ -37,24 +38,20 @@ const Dashloja = () => {
   }, []);
 
   const handleAddToCart = (product: Product) => {
-    setCart([...cart, product]);
-  };
-
-  const handleCheckout = () => {
-    console.log("Compra finalizada", cart);
+    addToCart(product);
   };
 
   return (
     <ImageBackground 
-    source={require('../../../assets/images/background.png')} 
+    source={require('../../../../assets/images/background.png')} 
     style={styles.backgroundImage}
   >
     <View style={styles.container}>
       <View style={styles.header}>
 
-        <Image source={require('../../../assets/images/LogoQueroMais.png')} alt="Logo" style={styles.headerLogo} />
+        <Image source={require('../../../../assets/images/LogoQueroMais.png')} alt="Logo" style={styles.headerLogo} />
 
-        <TouchableOpacity onPress={() => router.push('/cadMotorista')}>
+        <TouchableOpacity onPress={() => router.push('/(dash)/(dashLoja)/CartScreen')}>
           {/* Substituindo a imagem por um ícone */}
           <Feather name="shopping-cart" size={24} color="white" />
         </TouchableOpacity>
@@ -77,7 +74,7 @@ const Dashloja = () => {
 
       <View style={styles.cartSummary}>
         <Text style={styles.cartSummaryText}>Itens no Carrinho: {cart.length}</Text>
-        <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
+        <TouchableOpacity style={styles.checkoutButton} onPress={() => router.push('/(dash)/(dashLoja)/CartScreen')}>
           <Text style={styles.checkoutButtonText}>Finalizar Compra</Text>
         </TouchableOpacity>
       </View>
@@ -103,8 +100,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 15,
-    backgroundColor: theme.colors.black,
+    backgroundColor: theme.colors.vermelhoclaro,
     width: '100%',
+    elevation:20,
+   
   },
   headerLogo: {
     width: 100,
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 3,
+    elevation:5,
   },
   productImage: {
     width: 120,
